@@ -1,12 +1,13 @@
 package gcache
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"sync"
 )
+//单机版本
 
-//实现单机的缓存
 type Group struct {
 	name string
 	ca   cache
@@ -36,7 +37,7 @@ func GetGroup(name string) *Group {
 	return g
 }
 
-// Get value by key
+//
 func (g *Group) Get(key string) (Byte, error) {
 	if key == "" {
 		return Byte{}, fmt.Errorf("key is required")
@@ -47,9 +48,13 @@ func (g *Group) Get(key string) (Byte, error) {
 		return v, nil
 	}
 
-	return g.load(key)
+	return Byte{}, errors.New("not exist")
 }
 
-func (g *Group) load(key string) (value Byte, err error) {
-	return
+func (g *Group) Add(key string, value Byte) error {
+	if key == "" {
+		return fmt.Errorf("key is required")
+	}
+	g.ca.add(key, value)
+	return nil
 }

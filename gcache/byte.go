@@ -1,23 +1,21 @@
 package gcache
 
-//对lru进行封装，是Value的一种实现
+//对lru进行封装
+
 type Byte struct {
-	b []byte
+	B []byte
 }
 
-// Len returns the view's length
 func (v Byte) Len() int64 {
-	return int64(len(v.b))
+	return int64(len(v.B))
 }
 
-// ByteSlice returns a copy of the data as a byte slice.
 func (v Byte) ByteSlice() []byte {
-	return cloneBytes(v.b)
+	return cloneBytes(v.B)
 }
 
-// String returns the data as a string, making a copy if necessary.
 func (v Byte) String() string {
-	return string(v.b)
+	return string(v.B)
 }
 
 func cloneBytes(b []byte) []byte {
