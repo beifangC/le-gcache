@@ -13,11 +13,11 @@ type Hash func(data []byte) uint32
 type Map struct {
 	hash     Hash
 	replicas int            //虚拟节点数量
-	keys     []int          //有序
+	keys     []int          //有序,存的hash值
 	hashMap  map[int]string //虚拟节点和真实节点映射
 }
 
-// New creates a Map instance
+//
 func New(replicas int, fn Hash) *Map {
 	m := &Map{
 		replicas: replicas,
@@ -30,7 +30,7 @@ func New(replicas int, fn Hash) *Map {
 	return m
 }
 
-// Add adds some keys to the hash.
+// 添加服务节点
 func (m *Map) Add(keys ...string) {
 	for _, key := range keys {
 		for i := 0; i < m.replicas; i++ {
@@ -42,12 +42,11 @@ func (m *Map) Add(keys ...string) {
 	sort.Ints(m.keys)
 }
 
-// Get gets the closest item in the hash to the provided key.
+//获取节点
 func (m *Map) Get(key string) string {
 	if len(m.keys) == 0 {
 		return ""
 	}
-
 	hash := int(m.hash([]byte(key)))
 	// Binary search for appropriate replica.
 	idx := sort.Search(len(m.keys), func(i int) bool {
